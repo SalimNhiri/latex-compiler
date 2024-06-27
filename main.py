@@ -1,11 +1,21 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 import subprocess
 import os
 import uuid
 
 app = FastAPI()
+origins = ["*"]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+        
 @app.post("/compile-latex/")
 async def compile_latex(file: UploadFile = File(...)):
     # Create a unique directory for this compilation to avoid conflicts
